@@ -6,19 +6,19 @@ import {
   Switch
 }                           from 'react-router-dom'
 
-// import { authenticated } from '/imports/containers/authenticated'
+import { authenticated } from '/imports/routing/containers'
 
 import { Public }               from "/imports/routing/rolers"
 
 import { MainLayout }           from "/imports/layouts"
 
-// const App = appProps => (
-//   <Router>
-//     <Switch>
-//       <Public component={ MainLayout } path="/" {...appProps} />
-//     </Switch>
-//   </Router>
-// )
+const App = app_props => (
+  <Router>
+    <Switch>
+      <Public component={ MainLayout } path="/" {...app_props} />
+    </Switch>
+  </Router>
+)
 
 
-// export default authenticated(App)
+export default authenticated(App)
