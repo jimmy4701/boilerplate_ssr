@@ -1,0 +1,42 @@
+import React                    from "react"
+import { onPageLoad }           from "meteor/server-render"
+import { renderToString }       from "react-dom/server"
+import { ServerStyleSheet }     from "styled-components"
+import {
+  StaticRouter as Router,
+  Switch
+}                               from 'react-router-dom'
+import { MainLayout }           from '/imports/layouts'
+import { Public }                   from "/imports/routing/rolers"
+import { Helmet }               from "react-helmet"
+
+onPageLoad(sink => {
+  let browser = sink.request.browser.name
+  browser = browser.toLowerCase()
+  const isMobile = browser.indexOf("mobile") > -1
+
+  const context = {}
+  const sheet = new ServerStyleSheet()
+
+  const path = sink.request.url.path
+
+    let htmlString = renderToString(
+      sheet.collectStyles(
+        <Router
+          location={ path }
+          context={ context }>
+          <Switch>
+            <Public component={ MainLayout } path="/" isMobile={ isMobile } />
+          </Switch>
+        </Router>
+      )
+    )
+
+    sink.renderIntoElementById("root", htmlString)
+    sink.appendToHead(sheet.getStyleTags());
+    const helmet = Helmet.renderStatic();
+    const title = helmet.title.toString()
+    const meta = helmet.meta.toString()
+    sink.appendToHead(title)
+    sink.appendToHead(meta)
+})
